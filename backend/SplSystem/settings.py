@@ -130,8 +130,13 @@ AUTH_USER_MODEL = 'users.UserProfile'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
+<<<<<<< HEAD
 EMAIL_HOST_USER = 'emailmanager.yourjobaid@gmail.com'
 EMAIL_HOST_PASSWORD = 'gavmttxlqqqfhibk'
+=======
+EMAIL_HOST_USER = '##'
+EMAIL_HOST_PASSWORD = '##'
+>>>>>>> ed930825b13c96c725fa6ff5f172e94a337e7262
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
