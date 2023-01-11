@@ -56,7 +56,7 @@ const JoinSpl = ({ isAuthenticated, username }) => {
         <CRow className="justify-content-center">
           <CCol md={6}>
             <span className="clearfix">
-              <h4 className="pt-3">Enter spl join code !</h4>
+              <h4 className="pt-3">Enter code to join classroom !</h4>
             </span>
 
             <CInputGroup className="input-prepend">
