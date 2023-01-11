@@ -231,7 +231,7 @@ function projects() {
                 options={optionsMentors}
               />
               <CFormLabel className="description">
-                Assigned to Assigned to (Students):{" "}
+                Assigned to (Students):{" "}
               </CFormLabel>
               <Select
                 onChange={(e) => handleDropDown1(e)}
