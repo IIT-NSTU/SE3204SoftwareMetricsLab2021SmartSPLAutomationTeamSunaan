@@ -223,9 +223,7 @@ function projects() {
                 placeholder="Enter Team Name"
                 name="teamName"
               />
-              <CFormLabel className="description">
-                Assigned to (Mentor):{" "}
-              </CFormLabel>
+              <CFormLabel className="description">Project Mentor: </CFormLabel>
               <Select
                 onChange={(e) => handleDropDown(e)}
                 options={optionsMentors}

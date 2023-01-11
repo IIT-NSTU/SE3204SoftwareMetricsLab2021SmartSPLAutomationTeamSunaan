@@ -18,7 +18,7 @@ export const _navTeacher = [
   // },
   {
     component: CNavItem,
-    name: "Join to SPL",
+    name: "Join Classroom",
     to: "/join/spl",
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },

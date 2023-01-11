@@ -61,7 +61,7 @@ class JoinSpl(views.APIView):
         join_code = request.data['join_code']
         spl = models.Spl.objects.filter(join_code__iexact=join_code)
         if spl.count() == 0:
-            return Response({'message': "Spl not found"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': "Classroom not found"}, status=status.HTTP_400_BAD_REQUEST)
         spl = models.Spl.objects.get(join_code__iexact=join_code)
         user = models.Student.objects.filter(user_profile__username=username)
         if user.count() == 0:
