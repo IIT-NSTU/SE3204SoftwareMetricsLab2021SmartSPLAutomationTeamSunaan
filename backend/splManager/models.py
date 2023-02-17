@@ -37,9 +37,22 @@ class Task(models.Model):
     name = models.CharField(max_length=80)
     status = models.CharField(max_length=20)
     priority = models.CharField(max_length=20)
+    createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.name)
+
+
+def content_file_name(instance, filename):
+    return 'task_{0}/{1}'.format(instance.task.id, filename)
+class TaskFiles(models.Model):
+    files = models.FileField(upload_to=content_file_name, null=True,)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return f'{self.task} '
+
 
 
 class Spl(models.Model):

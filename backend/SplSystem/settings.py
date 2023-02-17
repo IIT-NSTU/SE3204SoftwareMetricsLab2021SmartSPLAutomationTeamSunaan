@@ -120,7 +120,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Here
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -130,8 +131,8 @@ AUTH_USER_MODEL = 'users.UserProfile'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = 'sunaansultaniit@gmail.com'
-EMAIL_HOST_PASSWORD = 'ggjlgvtexeecorsx'
+EMAIL_HOST_USER = 'emailmanager.yourjobaid@gmail.com'
+EMAIL_HOST_PASSWORD = 'gavmttxlqqqfhibk'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False

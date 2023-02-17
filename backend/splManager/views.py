@@ -1,4 +1,6 @@
 from django.http import HttpResponse, JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.authentication import TokenAuthentication
 from django.template.loader import get_template
 from rest_framework.response import Response
 from . import utils
@@ -56,24 +58,28 @@ class ProjectListViewBySPL(views.APIView):
 
 
 class JoinSpl(views.APIView):
+
+    authentication_classes =  (TokenAuthentication,)
     def post(self, request, format=None):
-        username = request.data['username']
+        global student
         join_code = request.data['join_code']
         spl = models.Spl.objects.filter(join_code__iexact=join_code)
         if spl.count() == 0:
-            return Response({'message': "Spl not found"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': "Room not found"}, status=status.HTTP_400_BAD_REQUEST)
         spl = models.Spl.objects.get(join_code__iexact=join_code)
-        user = models.Student.objects.filter(user_profile__username=username)
-        if user.count() == 0:
-            user = models.Teacher.objects.filter(user_profile__username=username)
-            if user.count() == 0:
-                return Response({'message': "username is not valid"}, status=status.HTTP_400_BAD_REQUEST)
-            user = models.Teacher.objects.get(user_profile__username=username)
-            spl.mentors.add(user)
-            return Response({'message': "Join successful m"}, status=status.HTTP_200_OK)
-        user = models.Student.objects.get(user_profile__username=username)
-        spl.students.add(user)
-        return Response({'message': "Join successful s"}, status=status.HTTP_200_OK)
+        user = request.user
+        try:
+            student = models.Student.objects.get(user_profile=user)
+            spl.students.add(student)
+            return Response({'message': "Successfully joined as student."}, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            try:
+                teacher = models.Teacher.objects.get(user_profile=user)
+                spl.mentors.add(teacher)
+                return Response({'message': "Successfully joined as mentor."}, status=status.HTTP_200_OK)
+            except ObjectDoesNotExist:
+                return Response({'message': "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class FormTeam(views.APIView):
@@ -214,7 +220,7 @@ class TaskListByProjectID(views.APIView):
         task_list = models.Task.objects.filter(project=project_id)
         obj = []
         for i in task_list:
-            obj.append(serializers.TaskSerializer(i).data)
+            obj.append(serializers.TaskSerializer(i, context={'request': request}).data)
         return Response({'tasks': obj}, status=status.HTTP_200_OK)
 
 
@@ -251,12 +257,17 @@ class GetTeamByProjectID(views.APIView):
 
 class CreateTask(views.APIView):
     def post(self, request, project_id, format=None):
+        print(request.data)
+        print(request.headers)
+        name = request.data.get('name')
+        description = request.data.get('description')
+        assign = request.data.getlist('assign')
+        print(assign)
+        priority = request.data.get('priority')
+        task_status = request.data.get('task_status')
 
-        name = request.data['name']
-        description = request.data['description']
-        assign = request.data['assign']
-        priority = request.data['priority']
-        task_status = request.data['task_status']
+        files = request.FILES.getlist('files')
+
 
         project = models.Project.objects.filter(pk=project_id)
         if project.count() == 0:
@@ -267,8 +278,16 @@ class CreateTask(views.APIView):
         task = models.Task.objects.create(name=name, description=description, priority=priority, status=task_status,
                                           project=project)
         task.save()
+        for file in files:
+            serializer = serializers.TaskFileSerializer(data={'files': file, 'task': task.id})
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                print(serializer.errors)
+
 
         for student_username in assign:
+            print("#########",student_username)
             student = models.Student.objects.get(user_profile__username=student_username)
             task.assign.add(student)
 

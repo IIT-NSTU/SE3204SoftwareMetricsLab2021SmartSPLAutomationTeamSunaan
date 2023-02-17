@@ -3,12 +3,19 @@ from .utils import unique_spl_join_code
 from . import models
 
 
+
+class TaskFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TaskFiles
+        fields = ['files', 'task']
+
 class TaskSerializer(serializers.ModelSerializer):
     assign = serializers.SerializerMethodField()
+    files = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Task
-        fields = ['id', 'project', 'assign', 'name', 'status', 'priority', 'description']
+        fields = ['id', 'project', 'assign', 'name', 'status', 'priority', 'description', 'files']
 
     def get_assign(self, obj):
         result = []
@@ -19,7 +26,18 @@ class TaskSerializer(serializers.ModelSerializer):
             x['last_name'] = i.user_profile.last_name
             result.append(x)
 
+    def get_files(self, obj):
+        request = self.context.get('request')
+
+
+        result = []
+        taskfiles = models.TaskFiles.objects.filter(task_id=obj.id)
+        for i in taskfiles:
+            result.append(request.build_absolute_uri(i.files.url))
+
         return result
+
+
 
 
 class SplSerializer(serializers.ModelSerializer):
