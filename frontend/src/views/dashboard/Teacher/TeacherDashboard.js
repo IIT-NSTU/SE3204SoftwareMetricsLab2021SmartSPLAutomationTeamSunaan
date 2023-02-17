@@ -76,7 +76,7 @@ function Dashboard() {
       <div className="header2">
         <CContainer>
           <CRow>
-            <CCol>SPLs</CCol>
+            <CCol>Rooms</CCol>
             <CCol style={{ textAlign: "end" }}>
               {" "}
               <CButton
@@ -100,6 +100,7 @@ function Dashboard() {
             className="row g-3 needs-validation"
             noValidate
             onSubmit={handleSubmit}
+            style={{ padding: "1rem" }}
           >
             <CModalHeader>
               <CModalTitle>Create Room</CModalTitle>

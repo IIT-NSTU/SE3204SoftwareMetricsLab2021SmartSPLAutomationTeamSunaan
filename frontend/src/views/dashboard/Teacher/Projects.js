@@ -202,6 +202,7 @@ function projects() {
             className="row g-3 needs-validation"
             noValidate
             onSubmit={handleSubmit}
+            style={{ padding: "1rem" }}
           >
             <CModalHeader>
               <CModalTitle>Create Project</CModalTitle>

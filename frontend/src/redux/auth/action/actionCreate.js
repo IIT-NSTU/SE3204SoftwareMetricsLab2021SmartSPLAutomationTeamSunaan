@@ -248,8 +248,6 @@ export const authCheckState = () => {
         console.log("expirationDate");
         dispatch(logout());
       } else {
-        console.log("success");
-        console.log(token);
         const config = {
           headers: {
             "Content-Type": "application/json",

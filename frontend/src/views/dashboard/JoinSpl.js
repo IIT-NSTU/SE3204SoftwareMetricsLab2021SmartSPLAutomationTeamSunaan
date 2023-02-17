@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import * as actions from "../../redux/auth/action/actionCreate";
 import { connect } from "react-redux";
+import { handleError } from "../../redux/auth/utility";
 import {
   CButton,
   CCol,
@@ -16,7 +17,7 @@ import {
   CForm,
 } from "@coreui/react";
 
-const JoinSpl = ({ isAuthenticated, username }) => {
+const JoinSpl = ({ isAuthenticated, username, token }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -25,20 +26,29 @@ const JoinSpl = ({ isAuthenticated, username }) => {
     if (isEmptyOrSpaces(code)) {
       toast.error("Code can't be empty!");
     } else {
-      axios.defaults.headers = {
-        "Content-Type": "application/json",
+      console.log(username);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
       };
       axios
-        .post("http://127.0.0.1:8000/api/spl-manager/spl/join", {
-          username: username,
-          join_code: code,
-        })
+        .post(
+          "http://127.0.0.1:8000/api/spl-manager/spl/join",
+          {
+            username: username,
+            join_code: code,
+          },
+          config
+        )
         .then((response) => {
           console.log(response.data);
           toast.success(response.data.message);
         })
         .catch((error) => {
-          toast.error(error.response.data.message);
+          handleError(error);
+          console.log(error);
         });
     }
   };
@@ -79,6 +89,7 @@ const JoinSpl = ({ isAuthenticated, username }) => {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.token !== null,
+    token: state.auth.token,
     isTeacher: state.auth.isTeacher,
     username: state.auth.username,
     isStudent: state.auth.isStudent,
