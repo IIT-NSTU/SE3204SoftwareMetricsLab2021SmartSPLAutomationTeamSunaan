@@ -102,7 +102,7 @@ function EditTask() {
           task_status: dropDownStatus,
         })
         .then((response) => {
-          toast.success("task create successful");
+          toast.success("task update successful");
           console.log(response.data);
           //   setVisibleLg(false);
         })
