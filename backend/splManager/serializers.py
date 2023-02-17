@@ -25,6 +25,7 @@ class TaskSerializer(serializers.ModelSerializer):
             x['first_name'] = i.user_profile.first_name
             x['last_name'] = i.user_profile.last_name
             result.append(x)
+        return result
 
     def get_files(self, obj):
         request = self.context.get('request')

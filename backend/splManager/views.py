@@ -289,6 +289,7 @@ class CreateTask(views.APIView):
         for student_username in assign:
             print("#########",student_username)
             student = models.Student.objects.get(user_profile__username=student_username)
+            print(student)
             task.assign.add(student)
 
         return Response({'message': 'Task Create successful'}, status=status.HTTP_200_OK)
