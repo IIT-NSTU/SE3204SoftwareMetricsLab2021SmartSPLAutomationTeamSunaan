@@ -15,7 +15,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Task
-        fields = ['id', 'project', 'assign', 'name', 'status', 'priority', 'description', 'files']
+        fields = ['id', 'project', 'assign', 'name', 'status', 'priority', 'description', 'files', 'createdAt']
 
     def get_assign(self, obj):
         result = []
